@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>DirectusClient Test</title>
+  <script type="importmap">
+    {
+      "imports": {
+        "axios": "https://cdn.jsdelivr.net/npm/axios@1.6.8/+esm"
+      }
+    }
+  </script>
+</head>
+<body>
+ <h1>🌍 Countries List</h1>
+<div id="status">🔄 Waiting...</div>
+<ul id="country-list"></ul>
+ <button id="refetchBtn">Refetch</button>
+  <button id="mutateBtn">Mutate Dummy</button>
+  <button id="viewStoreBtn">Xem Store</button>
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
