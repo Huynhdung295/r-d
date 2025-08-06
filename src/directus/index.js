@@ -46,3 +46,15 @@ export function syncClientLanguage() {
 //   .setLanguage(getCurrentLanguage()); // Lang hiện tại
 
 // export const clientAdmin = new DirectusClient("https://api.admin.com");
+
+
+
+// const clientAdmin = new DirectusClient("https://admin-api.com");
+
+// // nếu cần tự động lấy token:
+// clientAdmin.autoAuthWithHeader("x-access-token", {
+//   backup: [{ key: "env", value: "process.env.ADMIN_TOKEN" }],
+// });
+
+// const tables = await clientAdmin.getAllTableNames();
+// console.log(tables); /

@@ -1,5 +1,3 @@
-// DirectusClient SDK - Final Fully Upgraded Version with Watching, Polling, Refetching, Realtime Store Access
-
 import axios from "axios";
 import _ from "lodash";
 
@@ -93,6 +91,33 @@ export class DirectusClient {
       Authorization: token ? `Bearer ${token}` : undefined,
       [this._authHeaderKey]: token,
     };
+  }
+
+  async getAllTableNames() {
+    const headers = this._resolveAuthHeader();
+    try {
+      const res = await axios.post(
+        `${this.baseURL}/graphql`,
+        {
+          query: `{
+            __schema {
+              types {
+                kind
+                name
+              }
+            }
+          }`,
+        },
+        { headers }
+      );
+      const types = _.get(res, "data.data.__schema.types", []);
+      return types
+        .filter((t) => t.kind === "OBJECT" && !t.name.startsWith("__"))
+        .map((t) => t.name);
+    } catch (err) {
+      console.error("Failed to fetch GraphQL schema", err);
+      return [];
+    }
   }
 
   async create(table, payload) {
