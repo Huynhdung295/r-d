@@ -1,4 +1,4 @@
-import { DirectusClient } from "../directusSDK.js";
+import { DirectusClient } from "../directusSdk/directusSDK.js";
 /**
  * @typedef {import('../types.js').TestApg} TestApg
  * @typedef {import('../types.js').RefetchFn} RefetchFn

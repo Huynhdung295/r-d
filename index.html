@@ -6,18 +6,24 @@
   <script type="importmap">
     {
       "imports": {
-        "axios": "https://cdn.jsdelivr.net/npm/axios@1.6.8/+esm"
+        "axios": "https://cdn.jsdelivr.net/npm/axios@1.6.8/+esm",
+        "lodash": "https://cdn.jsdelivr.net/npm/lodash-es@4.17.21/+esm"
       }
     }
   </script>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; }
+    li { margin: 0.25rem 0; }
+    button { margin-right: 1rem; }
+  </style>
 </head>
 <body>
- <h1>🌍 Countries List</h1>
-<div id="status">🔄 Waiting...</div>
-<ul id="country-list"></ul>
- <button id="refetchBtn">Refetch</button>
-  <button id="mutateBtn">Mutate Dummy</button>
-  <button id="viewStoreBtn">Xem Store</button>
+  <h1>🌍 Countries List</h1>
+  <div id="status">🔄 Waiting...</div>
+  <ul id="country-list"></ul>
+  <button id="refetchBtn">🔁 Refetch</button>
+  <button id="mutateBtn">🧪 Mutate Dummy</button>
+  <button id="viewStoreBtn">🧠 View Store</button>
   <script type="module" src="./main.js"></script>
 </body>
 </html>

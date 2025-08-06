@@ -1,4 +1,4 @@
-import { DirectusClient } from './directusSDK.js';
+import { DirectusClient } from './directusSdk/directusSDK.js';
 
 const client = new DirectusClient('https://countries.trevorblades.com');
 
@@ -12,22 +12,16 @@ const countriesDef = {
   ],
 };
 
-client.defineType('countries', {
-  code: '',
-  name: '',
-  continent: { name: '' },
-  languages: [{ name: '' }],
-});
-
 const state = client
   .query(countriesDef, {
     filter: { code: { in: ['VN', 'JP', 'US'] } },
+    preserve: false,
   })
   .key('countryQuery')
   .prefix('asiaGroup')
   .use();
 
-// ✅ Listen realtime
+// Listen to changes
 client.listen('asiaGroup', (val) => {
   const status = document.getElementById('status');
   if (status) status.textContent = val.loading ? '⏳ Loading...' : '✅ Ready';
@@ -38,7 +32,12 @@ async function render() {
   const ul = document.getElementById('country-list');
   ul.innerHTML = '<li>⏳ Loading...</li>';
 
-  await state.refetch();
+  await state.refetch({
+    force: true,
+    onError: (e) => console.error('❌ Error refetching:', e),
+    onSuccess: (data) => console.log('✅ Data fetched:', data),
+    onFinally: () => console.log('🏁 Refetch complete'),
+  });
 
   ul.innerHTML = '';
   if (state.error) {
@@ -46,18 +45,22 @@ async function render() {
     return;
   }
 
-  state.data?.forEach((c) => {
+  if (state.data?.length === 0) {
+    ul.innerHTML = '<li>⚠️ No data available</li>';
+    return;
+  }
+
+  state.data.forEach((c) => {
     const li = document.createElement('li');
-    li.textContent = `${c.code} - ${c.name}`;
+    li.textContent = `${c.code} - ${c.name} (${c.continent?.name}) [Langs: ${c.languages.map(l => l.name).join(', ')}]`;
     ul.appendChild(li);
   });
 }
 
+render();
 
-render()
 document.getElementById('refetchBtn').addEventListener('click', render);
 
-// ❌ mutate() bị loại bỏ, dùng update()
 document.getElementById('mutateBtn').addEventListener('click', () => {
   const fake = [
     {
@@ -67,11 +70,11 @@ document.getElementById('mutateBtn').addEventListener('click', () => {
       languages: [{ name: 'Testish' }],
     },
   ];
-  client.update('countries', 'data', fake); // update vào store
-  render()
+  client.update('countries', 'data', fake); // update into store
+  render();
 });
 
 document.getElementById('viewStoreBtn').addEventListener('click', () => {
-  const store = client.store('countries').prefix('asiaGroup').get();
-  console.log('🧠 Full Store:', store);
+  const store = client.store('countries').get();
+  console.log('🧠 Full Store Snapshot:', store);
 });
